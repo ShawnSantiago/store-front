@@ -1,0 +1,6 @@
+development:
+  password: 39be25f113b7caaec3997f79d2eca729
+  theme_id: "42251747387"
+  store: parkanow.myshopify.com
+  ignore_files:
+    - config/settings_data.json

@@ -1,0 +1,124 @@
+<div class="newsletter text-center" data-section-id="{{ section.id }}" data-section-type="newsletter-signup-section">
+  {% unless section.settings.heading == blank %}
+    <h2 {% if section.settings.subheading == blank %}class="section-title"{% endif %}>{{ section.settings.heading | escape }}</h2>
+  {% endunless %}
+  {% if section.settings.subheading != blank %}
+    <div class="rte">{{ section.settings.subheading }}</div>
+  {% endif %}
+  <div class="wrapper">
+    {% form 'customer' %}
+      {{ form.errors | default_errors }}
+      {% if form.posted_successfully? %}
+        <p class="form--success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+      {% else %}
+        <div class="input-group">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label for="Email" class="newsletter__label label--hidden">{{ 'general.newsletter_form.email_placeholder' | t }}</label>
+          <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" name="contact[email]" id="Email" class="input-group__field newsletter__input" autocorrect="off" autocapitalize="off">
+          <span class="input-group__btn">
+            <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
+              <span class="newsletter__submit-text--large">{{ 'general.newsletter_form.submit' | t }}</span>
+            </button>
+          </span>
+        </div>
+      {% endif %}
+    {% endform %}
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Newsletter",
+    "en": "Newsletter",
+    "es": "Boletín",
+    "fr": "Newsletter",
+    "it": "Newsletter",
+    "ja": "メールマガジン",
+    "pt-BR": "Newsletter"
+  },
+  "class": "index-section newsletter-signup",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": {
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fr": "Titre",
+        "it": "Heading",
+        "ja": "見出し",
+        "pt-BR": "Título"
+      },
+      "default": {
+        "de": "Unseren Newsletter abonnieren",
+        "en": "Subscribe to our newsletter",
+        "es": "Suscríbete a nuestro boletín de noticias",
+        "fr": "Inscription à la newsletter",
+        "it": "Iscriviti alla nostra newsletter",
+        "ja": "ストアからのお知らせを受け取る",
+        "pt-BR": "Receber nosso newsletter"
+      }
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": {
+        "de": "Unter-Überschrift",
+        "en": "Subheading",
+        "es": "Subtítulo",
+        "fr": "Sous-titre",
+        "it": "Sottotitolo",
+        "ja": "小見出し",
+        "pt-BR": "Subtítulo"
+      },
+      "default": {
+        "de": "<p>Eine kurze Beschreibung zum Inhalt des Newsletters</p>",
+        "en": "<p>A short sentence describing what someone will receive by subscribing</p>",
+        "es": "<p>Una frase corta que describe lo que las personas recibirán al suscribirse</p>",
+        "fr": "<p>Petite phrase qui décrit ce qu'on reçoit en s'inscrivant</p>",
+        "it": "<p>Una breve frase che descrive ciò che qualcuno riceverà effettuando l'iscrizione</p>",
+        "ja": "<p>購読している人が何を受け取ることができるかについて説明する短い文章</p>",
+        "pt-BR": "<p>Uma frase curta que descreve o que alguém receberá ao assinar</p>"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "de": "Für alle Kunden, die sich anmelden, wird in Shopify ein Konto erstellt. [Kunden anzeigen](/admin/customers?query=&accepts_marketing=1)",
+        "en": "Any customers who sign up, will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
+        "es": "Todos los clientes que se registren tendrán una cuenta creada para ellos en Shopify. [Ver clientes](/admin/customers?query=&accepts_marketing=1)",
+        "fr": "Les clients qui s'inscrivent auront un compte créé pour eux sur Shopify. [Afficher les clients](/admin/customers?query=&accepts_marketing=1)",
+        "it": "A qualsiasi cliente si iscriva verrà creato un account su Shopify. [Visualizza clienti](/admin/customers?query=&accepts_marketing=1)",
+        "ja": "登録したお客様は、Shopifyでアカウントが作成されます。[お客様を表示](/admin/customers?query=&accepts_marketing=1)",
+        "pt-BR": "Todos os clientes que se inscreverem terão uma conta criada para eles na Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "de": "Newsletter",
+        "en": "Newsletter",
+        "es": "Boletín",
+        "fr": "Newsletter",
+        "it": "Newsletter",
+        "ja": "メールマガジン",
+        "pt-BR": "Newsletter"
+      },
+      "category": {
+        "de": "Promotional",
+        "en": "Promotional",
+        "es": "Promocional",
+        "fr": "Promotionnel",
+        "it": "Promozionale",
+        "ja": "プロモーション用",
+        "pt-BR": "Promocional"
+      }
+    }
+  ]
+}
+{% endschema %}

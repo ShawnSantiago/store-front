@@ -1,0 +1,481 @@
+<style>
+  .hero__site-header .site-header__link {
+      color: {{ section.settings.hero_text_color }};
+  }
+
+  .hero__logo {
+    color: {{ section.settings.hero_text_color }};
+  }
+
+  .hero__logo:after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    margin-left: -20px;
+    margin-top: - 20px;
+    border-radius: 50%;
+    border: 3px solid {{ section.settings.hero_text_color }};
+    border-top-color: transparent;
+  }
+
+  .hero__logo-text {
+    color: {{ section.settings.hero_text_color }};
+  }
+
+  .hero__logo-image {
+    {% if section.settings.hero_logo_max_width != blank %}
+    width: {{ section.settings.hero_logo_max_width | escape | abs }}px;
+    {% else %}
+    width: initial;
+    {% endif %}
+  }
+
+  .hero-wrapper:after {
+    background-color: {{ section.settings.hero_overlay_color }};
+    opacity: {{ section.settings.hero_overlay_amount }};
+  }
+
+</style>
+
+<div data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+  {% unless section.settings.hero_logo_type == 'none' %}
+    <div class="hero__logo-wrapper">
+        <h1 class="hero__logo" itemscope itemtype="http://schema.org/Organization">
+          <span class="hero__logo-centered">
+            {% case section.settings.hero_logo_type %}
+              {% when 'custom' %}
+                <img class="hero__logo-image" src="{{ section.settings.hero-logo | img_url: '1024x1024'  }}" alt="{{ shop.name }}" itemprop="logo">
+              {% when 'text' %}
+                <h1 class="hero__logo-text" itemprop="url">{{ shop.name }}</h1>
+            {% endcase %}
+          </span>
+        </h1>
+    </div>
+  {% endunless %}
+  <div class="hero slideshow-{{ section.id }}" id="Hero">
+    {% if section.blocks.size > 0 %}
+      {% for block in section.blocks %}
+        {% if block.settings.hero_slide  == blank %}
+          <div class="placeholder-background hero__slide hero__slide--{{ block.id }}" {{ block.shopify_attributes }}>
+            {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+            {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'icon icon--placeholder' }}
+          </div>
+        {% else %}
+        <div class="hero__slide hero__slide--{{ block.id }}" {{ block.shopify_attributes }}>
+          {% assign img_url = block.settings.hero_slide | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="hero__image hero__image--{{ block.id }} lazyload{% unless forloop.first == true %} lazypreload{% endunless %}"
+            {% if forloop.first == true %}
+              src="{{ block.settings.hero_slide | img_url: '300x' }}"
+            {% endif %}
+            data-src="{{ img_url }}"
+            data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
+            data-aspectratio="{{ block.settings.hero_slide.aspect_ratio }}"
+            data-sizes="auto"
+            data-parent-fit="cover"
+            alt="{{ block.settings.hero_slide.alt | escape }}">
+          <noscript>
+            {% if forloop.first == true %}
+              <div class="hero__image-no-js hero__image--{{ block.id }}" data-image="{{ block.id }}" style="background-image: url('{{ block.settings.hero_slide | img_url: "2048x2048" }}');"></div>
+            {% endif %}
+          </noscript>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="hero__slide" {{ block.shopify_attributes }}>
+        {% assign img_url = 'hero_slide_1.jpg' | asset_img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <img class="hero__image hero__image--{{ block.id }} lazyload"
+          data-src="{{ img_url }}"
+          data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+          data-sizes="auto"
+          data-parent-fit="cover">
+        <noscript>
+          <div class="hero__image-no-js hero__image--{{ block.id }}" data-image="{{ block.id }}" style="background-image: url('{{ "hero_slide_1.jpg" | asset_img_url: "2048x2048" }}')"></div>
+        </noscript>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Slideshow",
+    "en": "Slideshow",
+    "es": "Diapositivas",
+    "fr": "Diaporama",
+    "it": "Presentazione",
+    "ja": "スライドショー",
+    "pt-BR": "Apresentação de slides"
+  },
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "header",
+      "content": {
+        "de": "Logo",
+        "en": "Logo",
+        "es": "Logotipo",
+        "fr": "Logo",
+        "it": "Logo",
+        "ja": "ロゴ",
+        "pt-BR": "Logotipo"
+      }
+    },
+    {
+      "type": "color",
+      "id": "hero_text_color",
+      "label": {
+        "de": "Textfarbe",
+        "en": "Text color",
+        "es": "Color del texto",
+        "fr": "Couleur du texte",
+        "it": "Colore del testo",
+        "ja": "文字の色",
+        "pt-BR": "Cor do texto"
+      },
+      "default": "#000"
+    },
+    {
+      "type": "select",
+      "id": "hero_logo_type",
+      "label": {
+        "de": "Logotyp",
+        "en": "Logo type",
+        "es": "Tipo de logotipo",
+        "fr": "Type de logo",
+        "it": "Tipo di logo",
+        "ja": "ロゴタイプ",
+        "pt-BR": "Tipo de logotipo"
+      },
+      "default": "text",
+      "options": [
+        {
+          "value": "none",
+          "label": {
+            "de": "Kein Logo",
+            "en": "No logo",
+            "es": "Sin logotipo",
+            "fr": "Pas de logo",
+            "it": "Nessun logo",
+            "ja": "ロゴなし",
+            "pt-BR": "Sem logotipo"
+          }
+        },
+        {
+          "value": "custom",
+          "label": {
+            "de": "Benutzerdefiniertes Logo",
+            "en": "Custom logo",
+            "es": "Logotipo personalizado",
+            "fr": "Logo personnalisé",
+            "it": "Logo personalizzato",
+            "ja": "ロゴをカスタムする",
+            "pt-BR": "Logotipo personalizado"
+          }
+        },
+        {
+          "value": "text",
+          "label": {
+            "de": "Text Shopname",
+            "en": "Store name text",
+            "es": "Texto del nombre de la tienda",
+            "fr": "Nom de la boutique",
+            "it": "Testo con nome negozio",
+            "ja": "ストア名のテキスト",
+            "pt-BR": "Texto do nome da loja"
+          }
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "hero-logo",
+      "label": {
+        "de": "Benutzerdefiniertes Logobild",
+        "en": "Custom logo image",
+        "es": "Imagen personalizada del logotipo",
+        "fr": "Image de logo personnalisé",
+        "it": "Immagine logo personalizzata",
+        "ja": "ロゴ画像をカスタムする",
+        "pt-BR": "Imagem do logotipo personalizado"
+      },
+      "info": {
+        "de": "1000 x 1000 Pixel empfohlen",
+        "en": "1000 x 1000px recommended",
+        "es": "1000 x 1000px recomendado",
+        "fr": "1000 x 500 px recommandé",
+        "it": "Dimensione consigliata: 1000 x 1000 pixel",
+        "ja": "1000 x 1000ピクセルを推奨",
+        "pt-BR": "1000 x 1000px recomendado"
+      }
+    },
+    {
+      "type": "text",
+      "id": "hero_logo_max_width",
+      "label": {
+        "de": "Logobreite (in Pixel)",
+        "en": "Logo width (in pixels)",
+        "es": "Ancho del logotipo (en píxeles)",
+        "fr": "Largeur du logo (pixels)",
+        "it": "Larghezza logo (in pixel)",
+        "ja": "ロゴの幅（ピクセル）",
+        "pt-BR": "Largura do logotipo (em pixels)"
+      },
+      "default": {
+        "de": "400",
+        "en": "400",
+        "es": "400",
+        "fr": "400",
+        "it": "400",
+        "ja": "400",
+        "pt-BR": "400"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "de": "Overlay",
+        "en": "Overlay",
+        "es": "Superposición",
+        "fr": "Superposition",
+        "it": "Sovrapposizione",
+        "ja": "オーバーレイ",
+        "pt-BR": "Sobreposição"
+      }
+    },
+    {
+      "type": "color",
+      "id": "hero_overlay_color",
+      "label": {
+        "de": "Bildüberlagerungsfarbe",
+        "en": "Image overlay color",
+        "es": "Color de superposición de imágenes",
+        "fr": "Couleur de superposition d'images",
+        "it": "Colore sovrapposizione immagine",
+        "ja": "画像のオーバーレイの色",
+        "pt-BR": "Cor de sobreposição de imagem"
+      },
+      "default": "#000"
+    },
+    {
+      "type": "select",
+      "id": "hero_overlay_amount",
+      "label": {
+        "de": "Opazität",
+        "en": "Opacity",
+        "es": "Opacidad",
+        "fr": "Opacité",
+        "it": "Opacità",
+        "ja": "不透過率",
+        "pt-BR": "Opacidade"
+      },
+      "default": "0.05",
+      "options": [
+        {
+          "value": "0.01",
+          "label": {
+            "de": "1%",
+            "en": "1%",
+            "es": "1%",
+            "fr": "1 %",
+            "it": "1%",
+            "ja": "1%",
+            "pt-BR": "1%"
+          }
+        },
+        {
+          "value": "0.02",
+          "label": {
+            "de": "2%",
+            "en": "2%",
+            "es": "2%",
+            "fr": "2 %",
+            "it": "2%",
+            "ja": "2%",
+            "pt-BR": "2%"
+          }
+        },
+        {
+          "value": "0.03",
+          "label": {
+            "de": "3%",
+            "en": "3%",
+            "es": "3%",
+            "fr": "3 %",
+            "it": "3%",
+            "ja": "3%",
+            "pt-BR": "3%"
+          }
+        },
+        {
+          "value": "0.04",
+          "label": {
+            "de": "4%",
+            "en": "4%",
+            "es": "4%",
+            "fr": "4 %",
+            "it": "4%",
+            "ja": "4%",
+            "pt-BR": "4%"
+          }
+        },
+        {
+          "value": "0.05",
+          "label": {
+            "de": "5%",
+            "en": "5%",
+            "es": "5%",
+            "fr": "5 %",
+            "it": "5%",
+            "ja": "5%",
+            "pt-BR": "5%"
+          }
+        },
+        {
+          "value": "0.08",
+          "label": {
+            "de": "8%",
+            "en": "8%",
+            "es": "8%",
+            "fr": "8 %",
+            "it": "8%",
+            "ja": "8%",
+            "pt-BR": "8%"
+          }
+        },
+        {
+          "value": "0.10",
+          "label": {
+            "de": "10%",
+            "en": "10%",
+            "es": "10%",
+            "fr": "10 %",
+            "it": "10%",
+            "ja": "10%",
+            "pt-BR": "10%"
+          }
+        },
+        {
+          "value": "0.15",
+          "label": {
+            "de": "15%",
+            "en": "15%",
+            "es": "15%",
+            "fr": "15 %",
+            "it": "15%",
+            "ja": "15%",
+            "pt-BR": "15%"
+          }
+        },
+        {
+          "value": "0.20",
+          "label": {
+            "de": "20%",
+            "en": "20%",
+            "es": "20%",
+            "fr": "20 %",
+            "it": "20%",
+            "ja": "20%",
+            "pt-BR": "20%"
+          }
+        },
+        {
+          "value": "0.25",
+          "label": {
+            "de": "25%",
+            "en": "25%",
+            "es": "25%",
+            "fr": "25 %",
+            "it": "25%",
+            "ja": "25%",
+            "pt-BR": "25%"
+          }
+        },
+        {
+          "value": "0.50",
+          "label": {
+            "de": "50%",
+            "en": "50%",
+            "es": "50%",
+            "fr": "50 %",
+            "it": "50%",
+            "ja": "50%",
+            "pt-BR": "50%"
+          }
+        },
+        {
+          "value": "0.80",
+          "label": {
+            "de": "80%",
+            "en": "80%",
+            "es": "80%",
+            "fr": "80 %",
+            "it": "80%",
+            "ja": "80%",
+            "pt-BR": "80%"
+          }
+        },
+        {
+          "value": "0.90",
+          "label": {
+            "de": "90%",
+            "en": "90%",
+            "es": "90%",
+            "fr": "90 %",
+            "it": "90%",
+            "ja": "90%",
+            "pt-BR": "90%"
+          }
+        },
+        {
+          "value": "0.95",
+          "label": {
+            "de": "95%",
+            "en": "95%",
+            "es": "95%",
+            "fr": "95 %",
+            "it": "95%",
+            "ja": "95%",
+            "pt-BR": "95%"
+          }
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "pt-BR": "Imagem"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "hero_slide",
+          "label": {
+            "de": "Foto",
+            "en": "Image",
+            "es": "Imagen",
+            "fr": "Image",
+            "it": "Immagine",
+            "ja": "画像",
+            "pt-BR": "Imagem"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

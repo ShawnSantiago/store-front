@@ -1,0 +1,244 @@
+<div class="featured-collection" data-section-id="{{ section.id }}" data-section-type="featured-collection-section">
+  {% comment %}
+    By default, featured products come from your Frontpage collection.
+    This collection is empty by default and must have products added to it
+  {% endcomment %}
+  {% if section.settings.home_featured_products == blank %}
+    {% assign featured_collection = "frontpage" %}
+  {% else %}
+    {% assign featured_collection = section.settings.home_featured_products %}
+  {% endif %}
+
+  {% comment %}Heading for screen readers{% endcomment %}
+  <h2 class="visually-hidden">{{ featured_collection }}</h2>
+
+  <div class="grid grid--no-gutters grid--uniform collection-grid">
+    {% comment %}
+      Set grid item widths based on settings
+    {% endcomment %}
+    {% include 'product-grid-width' with product_image_type: section.settings.product_image_type, product_image_size: section.settings.product_image_size %}
+
+    {% unless section.settings.home_featured_products == blank %}
+      {% for product in collections[featured_collection].products %}
+        {% assign price = product.price | money_without_trailing_zeros %}
+        {% include 'product-grid-item' with product_image_spacing: section.settings.product_image_spacing, vendor_enable: section.settings.vendor_enable %}
+      {% else %}
+        {% comment %}
+          If collection is empty, show onboarding state
+          For onboarding new users to your theme, we add some default products and onboarding tutorials to help populate their store
+        {% endcomment %}
+        {% include 'onboarding-featured-collection' with product_image_spacing: section.settings.product_image_spacing %}
+
+      {% endfor %}
+    {% else %}
+      {% include 'onboarding-featured-collection' with product_image_spacing: section.settings.product_image_spacing %}
+    {% endunless %}
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Featured Kategorie",
+    "en": "Featured collection",
+    "es": "Colección destacada",
+    "fr": "Collection en vedette",
+    "it": "Collezione in evidenza",
+    "ja": "特集コレクション",
+    "pt-BR": "Coleção em destaque"
+  },
+  "class": "index-section featured-collection-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": {
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fr": "Collection",
+        "it": "Collezione",
+        "ja": "コレクション",
+        "pt-BR": "Coleção"
+      }
+    },
+    {
+      "type": "collection",
+      "id": "home_featured_products",
+      "label": {
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fr": "Collection",
+        "it": "Collezione",
+        "ja": "コレクション",
+        "pt-BR": "Coleção"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "pt-BR": "Imagem"
+      }
+    },
+    {
+      "type": "select",
+      "id": "product_image_type",
+      "label": {
+        "de": "Bildstil",
+        "en": "Image style",
+        "es": "Estilo de imagen",
+        "fr": "Style d'image",
+        "it": "Stile immagine",
+        "ja": "画像スタイル",
+        "pt-BR": "Estilo da imagem"
+      },
+      "options": [
+        {
+          "value": "portrait",
+          "label": {
+            "de": "Hoch/Quadrat",
+            "en": "Tall/square",
+            "es": "Alta/cuadrada",
+            "fr": "Grand/carré",
+            "it": "Verticale/quadrata",
+            "ja": "縦長/正方形",
+            "pt-BR": "Alto/quadrado"
+          }
+        },
+        {
+          "value": "landscape",
+          "label": {
+            "de": "Breit",
+            "en": "Wide",
+            "es": "Ancho",
+            "fr": "Large",
+            "it": "Orizzontale",
+            "ja": "横長",
+            "pt-BR": "Grande"
+          }
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "product_image_size",
+      "label": {
+        "de": "Foto-Größe",
+        "en": "Image size",
+        "es": "Tamaño de la imagen",
+        "fr": "Taille de l'image",
+        "it": "Dimensione immagine",
+        "ja": "画像のサイズ",
+        "pt-BR": "Tamanho da imagem"
+      },
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": {
+            "de": "Klein",
+            "en": "Small",
+            "es": "Pequeña",
+            "fr": "Petite",
+            "it": "Small",
+            "ja": "小",
+            "pt-BR": "Pequeno"
+          }
+        },
+        {
+          "value": "medium",
+          "label": {
+            "de": "Mitte",
+            "en": "Medium",
+            "es": "Mediana",
+            "fr": "Moyenne",
+            "it": "Medium",
+            "ja": "中",
+            "pt-BR": "Médio"
+          }
+        },
+        {
+          "value": "large",
+          "label": {
+            "de": "Groß",
+            "en": "Large",
+            "es": "Grande",
+            "fr": "Grande",
+            "it": "Large",
+            "ja": "大",
+            "pt-BR": "Grande"
+          }
+        },
+        {
+          "value": "xlarge",
+          "label": {
+            "de": "Extra groß",
+            "en": "Extra large",
+            "es": "Extra grande",
+            "fr": "Très grande",
+            "it": "Extra large",
+            "ja": "特大",
+            "pt-BR": "Extra grande"
+          }
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "product_image_spacing",
+      "label": {
+        "de": "Bildabstand aktivieren",
+        "en": "Enable image spacing",
+        "es": "Habilitar espaciado de imagen",
+        "fr": "Activer l'espacement des images",
+        "it": "Abilita spaziatura immagini",
+        "ja": "画像の間隔を有効にする",
+        "pt-BR": "Ativar espaçamento de imagem"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "vendor_enable",
+      "label": {
+        "de": "Produktverkäufer anzeigen",
+        "en": "Show product vendor",
+        "es": "Mostrar proveedor del producto",
+        "fr": "Afficher le distributeur du produit",
+        "it": "Mostra fornitore prodotto",
+        "ja": "商品の販売元を表示する",
+        "pt-BR": "Exiba o fornecedor do produto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "de": "Featured Kategorie",
+        "en": "Featured collection",
+        "es": "Colección destacada",
+        "fr": "Collection en vedette",
+        "it": "Collezione in evidenza",
+        "ja": "特集コレクション",
+        "pt-BR": "Coleção em destaque"
+      },
+      "category": {
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fr": "Collection",
+        "it": "Collezione",
+        "ja": "コレクション",
+        "pt-BR": "Coleção"
+      }
+    }
+  ]
+}
+{% endschema %}
