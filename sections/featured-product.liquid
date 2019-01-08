@@ -47,7 +47,7 @@
                   <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} {% unless variant.available %} disabled="disabled" {% endunless %} value="{{ variant.id }}" data-sku="{{ variant.sku }}">{{ variant.title }} - {% if variant.available %}{{ variant.price | money_with_currency }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</option>
                 {% endfor %}
               </select>
-				{% include 'booking-form' %}
+				      {% include 'booking-form' %}
               {% if section.settings.show_quantity_selector %}
                 <div class="quantity-wrapper">
                   <label for="Quantity" class="product__quantity-label">{{ 'products.product.quantity' | t }}</label>

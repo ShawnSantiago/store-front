@@ -1,0 +1,34 @@
+/*!
+ * -- Shawn Shopify Theme | Critical CSS
+ *
+ * Load all you HEAD styles here for fast stylinging.
+ * Be aware of dependancies. The variables and mixin files for example, are loaded in the styles.scss aswell. But do not render anything in the files ;)
+ *
+ */
+
+/*
+ * System Setup
+ *
+ */
+
+  // Variables + Functions (Global) 
+  // @import "var";
+  // @import "mixin/mixin";
+
+  // Type + UI Reset
+  @import "var_type";
+  // @import "ui/reset";
+
+/*
+ * Critical Layout
+ *
+ * Element styles that you need loaded first
+ * - Add your files into the queque:
+ *
+ */
+
+  @import "theme/layout/header";
+  @import "theme/layout/body";
+  @import "theme/layout/main";
+  @import "theme/layout/footer";
+  @import "theme/layout/navigation";

@@ -1,0 +1,46 @@
+/*!
+ * -- SHawn Shopify Theme | Styles
+ *
+ * Author(s):
+ *  Shawn - www.shawnsantiago.com
+ *
+ * Copyright/Licences:
+ *  MIT - {link to public repo}
+ *
+ */
+
+/*
+ * -- System Setup
+ *
+ */
+
+  // Character Encoding
+  // @charset "UTF-8";
+
+  // Variables + Functions (Global)
+  // @import "var";
+  // @import "mixin/mixin";
+
+
+/*
+ * -- Vendors
+ *
+ */
+
+  // Browser UI Pack
+  // @import "ui/ui";
+
+
+/*!
+ *
+ * -- Custom CSS
+ *
+*/
+
+  // module styles
+  @import "theme/modules/prompt";
+
+  // template styles
+  @import "theme/templates/index";
+  @import "theme/templates/product";
+  @import "theme/templates/collection";
